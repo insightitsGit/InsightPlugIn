@@ -1,0 +1,230 @@
+{
+  "name": "insight-plugin",
+  "displayName": "InsightPlugIn — SMS Remote Control",
+  "description": "Remote-control Cursor agent sessions via SMS with Twilio, Sinch, or SMS8. Includes Master Agent with global session visibility.",
+  "version": "0.1.0",
+  "publisher": "insight-it",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/insightitsGit/InsightPlugIn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/insightitsGit/InsightPlugIn/issues"
+  },
+  "homepage": "https://github.com/insightitsGit/InsightPlugIn#readme",
+  "keywords": [
+    "cursor",
+    "sms",
+    "twilio",
+    "sinch",
+    "agent",
+    "remote-control"
+  ],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "insightPlugin.toggleSmsMode",
+        "title": "InsightPlugIn: Toggle SMS Remote Mode"
+      },
+      {
+        "command": "insightPlugin.openPanel",
+        "title": "InsightPlugIn: Open Control Panel"
+      },
+      {
+        "command": "insightPlugin.openMasterAgent",
+        "title": "InsightPlugIn: Open Master Agent"
+      },
+      {
+        "command": "insightPlugin.registerCurrentSession",
+        "title": "InsightPlugIn: Register Current Session"
+      },
+      {
+        "command": "insightPlugin.setActiveSession",
+        "title": "InsightPlugIn: Set Active SMS Session"
+      },
+      {
+        "command": "insightPlugin.injectPendingSms",
+        "title": "InsightPlugIn: Inject Pending SMS Reply"
+      },
+      {
+        "command": "insightPlugin.getAgentStatus",
+        "title": "InsightPlugIn: Get Agent Status"
+      },
+      {
+        "command": "insightPlugin.listAgentWindows",
+        "title": "InsightPlugIn: List Agent Windows"
+      },
+      {
+        "command": "insightPlugin.exportAuditLog",
+        "title": "InsightPlugIn: Export Audit Log"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "insightPlugin",
+          "title": "InsightPlugIn",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "insightPlugin": [
+        {
+          "type": "webview",
+          "id": "insightPlugin.controlPanel",
+          "name": "Control Center"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "InsightPlugIn",
+      "properties": {
+        "insightPlugin.smsProvider": {
+          "type": "string",
+          "enum": ["twilio", "sinch", "sms8"],
+          "default": "twilio",
+          "description": "SMS provider for remote agent control."
+        },
+        "insightPlugin.twilioAccountSid": {
+          "type": "string",
+          "default": "",
+          "description": "Twilio Account SID"
+        },
+        "insightPlugin.twilioAuthToken": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Deprecated. Auth token is stored in the OS secret store via the control panel. This setting is cleared on save."
+        },
+        "insightPlugin.twilioPhoneNumber": {
+          "type": "string",
+          "default": "",
+          "description": "Twilio phone number (E.164, e.g. +15551234567)"
+        },
+        "insightPlugin.sinchServicePlanId": {
+          "type": "string",
+          "default": "",
+          "description": "Sinch SMS service plan ID from the Sinch dashboard"
+        },
+        "insightPlugin.sinchRegion": {
+          "type": "string",
+          "enum": ["us", "eu", "au", "br", "ca"],
+          "default": "us",
+          "description": "Sinch SMS API region"
+        },
+        "insightPlugin.sinchPhoneNumber": {
+          "type": "string",
+          "default": "",
+          "description": "Sinch sender phone number (E.164)"
+        },
+        "insightPlugin.sms8DeviceId": {
+          "type": "string",
+          "default": "",
+          "description": "Optional SMS8 device ID (leave blank for primary paired Android)"
+        },
+        "insightPlugin.sms8SimSlot": {
+          "type": "number",
+          "enum": [0, 1],
+          "default": 0,
+          "description": "SMS8 SIM slot on the paired device (0 or 1)"
+        },
+        "insightPlugin.userPhoneNumber": {
+          "type": "string",
+          "default": "",
+          "description": "Your mobile phone number for SMS (E.164)"
+        },
+        "insightPlugin.pollIntervalMs": {
+          "type": "number",
+          "default": 8000,
+          "description": "How often to poll the active SMS provider for inbound messages (milliseconds)"
+        },
+        "insightPlugin.summaryMaxLength": {
+          "type": "number",
+          "default": 300,
+          "description": "Maximum length of SMS summaries"
+        },
+        "insightPlugin.enforceSenderValidation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Only accept inbound SMS from authorized phone numbers."
+        },
+        "insightPlugin.authorizedPhoneNumbers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Additional authorized E.164 phone numbers allowed to send control SMS."
+        },
+        "insightPlugin.requireMasterPassphrase": {
+          "type": "boolean",
+          "default": false,
+          "description": "Require MASTER: <passphrase> <command> for privileged SMS commands."
+        },
+        "insightPlugin.auditLoggingEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Write security and SMS audit events to the extension global storage log."
+        },
+        "insightPlugin.maxInboundSmsLength": {
+          "type": "number",
+          "default": 2000,
+          "description": "Maximum accepted inbound SMS body length."
+        },
+        "insightPlugin.maxInjectionQueueSize": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum queued pending SMS/master injections."
+        },
+        "insightPlugin.maxOutboundSmsPerHour": {
+          "type": "number",
+          "default": 120,
+          "description": "Maximum outbound SMS messages per hour."
+        },
+        "insightPlugin.minPollIntervalMs": {
+          "type": "number",
+          "default": 5000,
+          "description": "Minimum allowed SMS polling interval for any provider."
+        },
+        "insightPlugin.storeQueueInWorkspace": {
+          "type": "boolean",
+          "default": false,
+          "description": "Mirror pending injection queue into the workspace .insight-plugin folder."
+        },
+        "insightPlugin.redactSmsContent": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, strip API keys, secrets, code blocks, and paths from outbound SMS summaries. When false, agent replies (including API keys) are sent as-is (truncated to summaryMaxLength)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "package": "vsce package",
+    "publish:marketplace": "vsce publish",
+    "publish:openvsx": "ovsx publish",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "twilio": "^5.4.0"
+  }
+}
