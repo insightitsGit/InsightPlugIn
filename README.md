@@ -13,6 +13,28 @@ Local Cursor extension for **SMS remote control** of agent sessions. Supports **
   - Owner SMS: `MASTER` or `MASTER: <command>`
 - Master Agent can pause, continue, stop, switch active session, and inject comments
 
+
+**AI assistants:** [docs/ai-overview.md](docs/ai-overview.md) · [docs/llm-context.md](docs/llm-context.md) · [docs/architecture.md](docs/architecture.md)
+
+## What is this?
+
+Local Cursor/VS Code extension for SMS remote control of agent sessions (Twilio, Sinch, SMS8) with a Master Agent.
+
+**Package:** `insight-plugin (VS Code/Cursor extension)` 0.1.0
+
+## Who is it for?
+
+Developers who want to drive Cursor agent sessions from SMS.
+
+## What problem does it solve?
+
+Cannot monitor or steer agent windows while away from the IDE.
+
+## When NOT to use it
+
+You do not use Cursor/VS Code agents or SMS control.
+
+---
 ## SMS Provider Integrations
 
 InsightPlugIn uses a **unified SMS layer** — the same commands, polling, and Master Agent work regardless of which provider you choose. Configure one provider in the Control Center; switch anytime without changing SMS command syntax.
@@ -72,20 +94,56 @@ These apply no matter which provider is active:
 | `authorizedPhoneNumbers` | Additional E.164 numbers allowed to send control SMS |
 | `redactSmsContent` | Strip secrets/paths from outbound SMS when enabled |
 
-## Setup
+## Install in Cursor (plug in — no compile needed)
 
-1. Install dependencies:
+**F5 / `npm run compile` is only for developers.** Normal use is: install once, Cursor loads it automatically every time you open the app.
+
+### One-time install from VSIX
+
+1. Download **`insight-plugin-0.1.0.vsix`** from [GitHub Releases](https://github.com/insightitsGit/InsightPlugIn/releases) (or build locally with `npm run package`).
+
+2. In Cursor: **Extensions** → **`...`** menu → **Install from VSIX…** → select the file.
+
+   Or from a terminal:
+
+   ```powershell
+   cursor --install-extension "C:\path\to\insight-plugin-0.1.0.vsix"
+   ```
+
+3. Reload Cursor when prompted.
+
+4. Open the **InsightPlugIn** icon in the activity bar → **Control Center**, configure your SMS provider, save, then turn on **SMS Remote Mode**.
+
+After that:
+
+- The extension **starts automatically** whenever Cursor opens (`onStartupFinished`).
+- If SMS mode was left on, **polling and the Master Agent resume** on the next launch (no extra compile step).
+- Settings and credentials persist in Cursor’s extension storage.
+
+### Uninstall
+
+Extensions → InsightPlugIn → Uninstall.
+
+---
+
+## Developer setup (optional)
+
+Only needed if you are editing the extension source:
 
 ```bash
 npm install
-npm run compile
+npm run compile   # or npm run watch while developing
 ```
 
-2. In Cursor, open the project folder and press `F5` to launch the Extension Development Host.
+Press **F5** in Cursor with this repo open to launch an Extension Development Host.
 
-3. Open the **Control Center** sidebar panel, pick a provider tab, complete the setup checklist, and save.
+---
 
-4. Turn on **SMS Remote Mode**.
+## First-time configuration
+
+1. Open the **Control Center** sidebar panel, pick a provider tab, complete the setup checklist, and save.
+
+2. Turn on **SMS Remote Mode**.
 
 ## SMS Commands
 
