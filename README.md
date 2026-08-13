@@ -35,6 +35,9 @@ Cannot monitor or steer agent windows while away from the IDE.
 You do not use Cursor/VS Code agents or SMS control.
 
 ---
+
+**Keywords:** Cursor SMS remote control, Twilio Sinch SMS8 agent control, Master Agent multi-window, InsightPlugIn VS Code extension
+
 ## SMS Provider Integrations
 
 InsightPlugIn uses a **unified SMS layer** — the same commands, polling, and Master Agent work regardless of which provider you choose. Configure one provider in the Control Center; switch anytime without changing SMS command syntax.
@@ -211,3 +214,12 @@ See [SECURITY.md](./SECURITY.md) for credential handling per provider and deploy
 ## Notes
 
 Cursor does not yet expose a fully public API for injecting prompts into existing agent chats. Pending SMS/master commands are queued locally and copied to the clipboard for injection via **Inject Pending SMS Reply** or paste into chat.
+
+---
+
+## Links
+
+- Author: **Amin Parva** ([insightits.info@gmail.com](mailto:insightits.info@gmail.com))
+- Company: [https://www.insightits.com](https://www.insightits.com)
+- GitHub: https://github.com/insightitsGit/InsightPlugIn
+- Company site: https://www.insightits.com
